@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
-import RegEx from "../utils/regex";
+import RegEx from "../../utils/regex";
+import { Cookie } from './models';
 
-type Cookie = chrome.cookies.Cookie;
-
-interface WebsiteCookiesEntity { 
-  cookies: Cookie[],
-  count: number
-};
-
-type WebsiteCookiesEntities = {
-  [domain:string]: WebsiteCookiesEntity | undefined 
-};
 
 /** formats a cookies array as normalized relational pattern by cookie website */
 export function getCookiesByWebsite(cookies: Cookie[])  {
-  const entities = cookies.reduce<WebsiteCookiesEntities>
+  const entities = cookies.reduce<{
+    [website: string]: { 
+      cookies: Cookie[],
+      count: number
+    } | undefined 
+  }>
   ((websites, cookie) => {
     const websiteName = cookie.domain.replace(RegEx.firstDot, '');
     const website = websites[websiteName]
@@ -50,21 +46,3 @@ export function copyCookiesToWebsite(url?: string, cookies?: Cookie[] ) {
     })
   }
 };
-
-
-/** Provides cookies by website domain */
-export default function useWebsitesCookies() {
-  // stores all browser cookies
-  const [allCookies, initAllCookies] = useState<Cookie[]>([]);
-  const { entities, ids } = getCookiesByWebsite(allCookies);
-  
-  // Loads allCookies with browser cookies
-  useEffect(() => {
-    chrome.cookies.getAll({}, (cookies) => initAllCookies(cookies));
-  }, [])
-
-  return { 
-    entities,
-    ids
-  }
-}

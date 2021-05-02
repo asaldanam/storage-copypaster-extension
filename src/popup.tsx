@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import _debounce from 'lodash/debounce';
-import useWebsitesCookies, { copyCookiesToWebsite } from "./hooks/useWebsitesCookies";
-import useCurrentTab from "./hooks/useCurrentTab";
+import { copyCookiesToWebsite } from "./services/cookies/utils";
+import useWebsitesCookies from "./services/cookies/useWebsitesCookies";
+import useCurrentTab from "./services/tabs/useCurrentTab";
 
 const Popup = () => {
   const { url } = useCurrentTab();
