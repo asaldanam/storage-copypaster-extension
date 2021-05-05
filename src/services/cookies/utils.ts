@@ -42,6 +42,7 @@ export function copyCookiesToWebsite(url?: string, cookies?: Cookie[] ) {
         url: url,
         name: cookie.name,
         value: cookie.value,
+        path: cookie.path,
       })
     })
   }
